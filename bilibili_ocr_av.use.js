@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B 站排行榜类视频中 av 编号提取工具
 // @namespace    http://www.demojameson.com/bilibili-get-av
-// @version      0.1
+// @version      0.2
 // @description  通过获得局部视频截图，然后通过 OCR 的方式提取视频编号，生成链接或者在后台打开
 // @author       DemoJameson
 // @match        *://www.bilibili.com/video/av*
@@ -10,8 +10,9 @@
 // @grant        GM_notification
 // @grant        GM_getResourceURL
 // @require      https://github.com/naptha/tesseract.js/raw/master/dist/tesseract.js
-// @resource      tesseractCore https://github.com/naptha/tesseract.js-core/raw/master/index.js
+// @resource     tesseractCore https://github.com/naptha/tesseract.js-core/raw/master/index.js
 // @connect      bilibili.com
+// @updateURL    https://rawgit.com/DemoJameson/bilibili-video-number-ocr/master/bilibili_ocr_av.use.js
 // ==/UserScript==
 
 (function () {
