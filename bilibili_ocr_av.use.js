@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B 站排行榜类视频中 av 编号提取工具
 // @namespace    http://www.demojameson.com/bilibili-get-av
-// @version      0.2
+// @version      0.1
 // @description  通过获得局部视频截图，然后通过 OCR 的方式提取视频编号，生成链接或者在后台打开
 // @author       DemoJameson
 // @match        *://www.bilibili.com/video/av*
@@ -12,13 +12,13 @@
 // @require      https://github.com/naptha/tesseract.js/raw/master/dist/tesseract.js
 // @resource     tesseractCore https://github.com/naptha/tesseract.js-core/raw/master/index.js
 // @connect      bilibili.com
-// @updateURL    https://rawgit.com/DemoJameson/bilibili-video-number-ocr/master/bilibili_ocr_av.use.js
+// @updateURL    https://openuserjs.org/meta/DemoJameson/B_站排行榜类视频中_av_编号提取工具.meta.js
 // ==/UserScript==
 
 (function () {
   'use strict';
 
-  // ----------------------------- 配置区域 --- 开始 -----------------------------
+  // ----------------------------- 配置区域 --- 开始   -----------------------------
   // 截图与识别快捷键设置，默认按 alt+a 选择区域，alt+q 识别，如有需要请自行修改
   var ctrl = false;
   var alt = true;
