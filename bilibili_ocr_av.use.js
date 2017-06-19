@@ -210,8 +210,10 @@
 
       if (p.status === "downloading eng.traineddata.gz" && loadingData === true) {
         document.title = "OCR 数据库加载进度：" + p.progress.toFixed(2) * 100 + "%";
+      } else if (p.status === "recognizing text") {
+        document.title = "识别进度 " + p.progress.toFixed(2) * 100 + "%";
       } else {
-        document.title = "识别中……"
+        document.title = "识别中……";
       }
     }).then(function (result) {
       document.title = title;
