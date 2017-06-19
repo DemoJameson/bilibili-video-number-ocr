@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B 站排行榜类视频中 av 编号提取工具
 // @namespace    http://www.demojameson.com/bilibili-get-av
-// @version      0.1
+// @version      0.2
 // @description  通过获得局部视频截图，然后通过 OCR 的方式提取视频编号，生成链接或者在后台打开
 // @author       DemoJameson
 // @match        *://www.bilibili.com/video/av*
@@ -41,7 +41,8 @@
     corePath: GM_getResourceURL('tesseractCore')
   });
 
-
+  var noHtml5Message = "请使用 HTML5 播放器";
+  var notCrossDomainMessage = "因跨域的问题暂时无法截图，需等待视频缓冲完毕后方可截图";
   var downX, downY, upX, upY;
   var clipWidht, clipHeight, offsetX, offsetY;
   var width, height, x, y, scale;
@@ -53,15 +54,19 @@
     var code = e.key;
     console.log(code);
     if (code === selectAreaKey && e.ctrlKey === ctrl && e.altKey === alt && e.shiftKey === shift) {
-      if (disallowVideo()) {
-        GM_notification("因跨域的问题暂时无法截图，等待视频缓冲完毕后方可截图");
+      if (noHtml5Video()) {
+        GM_notification(noHtml5Message);
+      } else if (disallowVideo()) {
+        GM_notification(notCrossDomainMessage);
       } else {
         GM_notification("按住鼠标滑动后松开选定截图区域，检查弹出的图片是否包含视频编号。关掉图片回到视频，然后按下快捷键 alt+q 识别 av 号");
         addMouseListener();
       }
     } else if (code === ocrKey && e.ctrlKey === ctrl && e.altKey === alt && e.shiftKey === shift) {
-      if (disallowVideo()) {
-        GM_notification("因跨域的问题暂时无法截图，等待视频缓冲完毕后方可截图");
+      if (noHtml5Video()) {
+        GM_notification(noHtml5Message);
+      } else if (disallowVideo()) {
+        GM_notification(notCrossDomainMessage);
       } else if (!width) {
         GM_notification("请先选择视频编号所在的区域，默认快捷键为 alt+a");
       } else {
@@ -69,6 +74,10 @@
       }
     }
   };
+
+  function noHtml5Video() {
+    return null === document.querySelector('video');
+  }
 
   function disallowVideo() {
     var video = document.querySelector('video');
@@ -184,23 +193,28 @@
   }
 
   var loadingData = false;
+
   function ocrImage() {
     var canvas = getClipCanvas();
+    var title = document.title;
     Tesseract.recognize(canvas, {
       lang: 'eng',
       tessedit_char_whitelist: 'avAV0123456789'
     }).progress(function (p) {
       console.log('progress', p);
 
-      if(p.status === "downloading eng.traineddata.gz" && loadingData === false) {
+      if (p.status === "downloading eng.traineddata.gz" && loadingData === false) {
         GM_notification("首次使用需加载识别数据库，大约 9m 左右，加载进度可通过页面标题得知");
         loadingData = true;
       }
 
-      if(p.status === "downloading eng.traineddata.gz" && loadingData === true) {
+      if (p.status === "downloading eng.traineddata.gz" && loadingData === true) {
         document.title = "OCR 数据库加载进度：" + p.progress.toFixed(2) * 100 + "%";
+      } else {
+        document.title = "识别中……"
       }
     }).then(function (result) {
+      document.title = title;
       console.log('result', result);
       var videoNumber = result.text.replace(/[^avAV0-9]/g, "").toLowerCase();
       if (/^av\d+$/.test(videoNumber)) {
@@ -215,6 +229,7 @@
   }
 
   var firstLink = true;
+
   function appendLink(linkURL, videoNumber, title) {
     title = title || videoNumber;
 
