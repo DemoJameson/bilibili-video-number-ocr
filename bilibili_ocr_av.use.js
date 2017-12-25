@@ -14,6 +14,7 @@
 // @resource     tesseractCore https://github.com/naptha/tesseract.js-core/raw/master/index.js
 // @connect      bilibili.com
 // @updateURL    https://openuserjs.org/meta/DemoJameson/B_站排行榜类视频中_av_编号提取工具.meta.js
+// @license      MIT
 // ==/UserScript==
 
 (function () {
