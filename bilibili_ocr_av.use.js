@@ -10,7 +10,7 @@
 // @grant        GM_notification
 // @grant        GM_getResourceURL
 // @require      https://code.jquery.com/jquery-3.2.1.slim.min.js
-// @require      https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.14/dist/tesseract.min.js
+// @require      https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.19/dist/tesseract.min.js
 // @resource     tesseractCore https://github.com/naptha/tesseract.js-core/raw/master/index.js
 // @connect      bilibili.com
 // @updateURL    https://openuserjs.org/meta/DemoJameson/B_站排行榜类视频中_av_编号提取工具.meta.js
