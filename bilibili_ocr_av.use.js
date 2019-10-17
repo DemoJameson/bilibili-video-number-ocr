@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         B 站排行榜类视频中 av 编号提取工具
 // @namespace    http://www.demojameson.com/bilibili-get-av
-// @version      0.3
+// @version      0.4
 // @description  通过获得局部视频截图，然后通过 OCR 的方式提取视频编号，生成链接或者在后台打开
 // @author       DemoJameson
 // @match        *://www.bilibili.com/video/av*
@@ -10,7 +10,7 @@
 // @grant        GM_notification
 // @grant        GM_getResourceURL
 // @require      https://code.jquery.com/jquery-3.2.1.slim.min.js
-// @require      https://github.com/naptha/tesseract.js/raw/master/dist/tesseract.js
+// @require      https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.14/dist/tesseract.min.js
 // @resource     tesseractCore https://github.com/naptha/tesseract.js-core/raw/master/index.js
 // @connect      bilibili.com
 // @updateURL    https://openuserjs.org/meta/DemoJameson/B_站排行榜类视频中_av_编号提取工具.meta.js
@@ -21,11 +21,11 @@
     'use strict';
 
     // ----------------------------- 配置区域 --- 开始   -----------------------------
-    // 截图与识别快捷键设置，默认按 alt+a 选择区域，alt+q 识别，如有需要请自行修改
+    // 截图与识别快捷键设置，默认按 alt+z 选择区域，alt+q 识别，如有需要请自行修改
     var ctrl = false;
     var alt = true;
     var shift = false;
-    var selectAreaKey = "a"; // 如果视频编号位置固定，同一个视频是要识别一次就行了。
+    var selectAreaKey = "z"; // 如果视频编号位置固定，同一类视频只要设置一次就行了。
     var ocrKey = "q";
 
     // 识别后是否自动在后台打开视频链接
@@ -70,7 +70,7 @@
             } else if (disallowVideo()) {
                 GM_notification(notCrossDomainMessage);
             } else if (!width) {
-                GM_notification("请先选择视频编号所在的区域，默认快捷键为 alt+a");
+                GM_notification("请先选择视频编号所在的区域，默认快捷键为 alt+z");
             } else {
                 ocrImage();
             }
@@ -292,11 +292,12 @@
             url: linkURL,
             onload: function (response) {
                 console.log(response);
-                var titleMatch = response.responseText.match(/<h1[^>]*>([^<]+)<\/h1>/);
+                var titleMatch = response.responseText.match(/<title[^>]*>([^<]+)_哔哩哔哩 \(゜-゜\)つロ 干杯~-bilibili<\/title>/);
                 var title = "";
                 if (titleMatch) {
                     title = titleMatch[1];
                 }
+                console.log(title);
                 if (addLink) appendLink(linkURL, videoNumber, title);
                 if (addComment) appendComment(videoNumber, title);
             }
